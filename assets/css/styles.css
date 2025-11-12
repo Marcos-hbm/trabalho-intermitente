@@ -1,0 +1,11 @@
+/* Estilos simples e coerentes */
+.card-img-top {
+  height: 180px;
+  object-fit: cover;
+}
+.navbar-brand { letter-spacing: .5px; }
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
