@@ -68,17 +68,17 @@ echo
 #   * The value does NOT start with: //, http:, https:, mailto:, # (anchors)
 # - Adjust header('Location: /path') -> header('Location: path')
 # - Skip protocol-relative URLs (//), absolute URLs (http(s)://), mailto:, and fragment-only (#)
-PERL_EXPR='\
-  # 1) Attributes (href, src, action)\
-  s{(href|src|action)=("[\"]")/+(?!/|https?:|mailto:|#)([^"\']+)\2}{$1=$2$3$2}g;\
-\
-  # 2) <link ... href="/assets/..."> already handled by rule 1\
-\
-  # 3) header("Location: /path") and header('Location: /path')\
-  s{header\(\s*("[\"]")Location:\s*/+(?!/|https?:)([^"\']+)\1\s*}\{header($1Location: $2$1)}g;\
-\
-  # 4) PHP redirects using double quotes with space variations\
-  s{header\(\s*("[\"]")Location:\s*/+(?!/|https?:)([^"\']+)\1\s*;}{header($1Location: $2$1); }g;\
+PERL_EXPR='
+  # 1) Attributes (href, src, action)
+  s{(href|src|action)=([\"\'])/+(?!/|https?:|mailto:|#)([^\"\']+)\2}{$1=$2$3$2}g;
+
+  # 2) <link ... href="/assets/..."> already handled by rule 1
+
+  # 3) header("Location: /path") and header(\'Location: /path\')
+  s{header\(\s*([\"\'])Location:\s*/+(?!/|https?:)([^\"\']+)\1\s*\)}{header($1Location: $2$1)}g;
+
+  # 4) PHP redirects using double quotes with space variations
+  s{header\(\s*([\"\'])Location:\s*/+(?!/|https?:)([^\"\']+)\1\s*\)\s*;}{header($1Location: $2$1); }g;
 '
 
 # Find files and process them
@@ -107,4 +107,18 @@ while IFS= read -r -d '' file; do
   else
     rm -f "$tmp"
   fi
-n... (truncated for size)
+done < <(find "$ROOT" -type f \( "${find_expr[@]}" \) -print0)
+
+echo
+if [ "$modified" -eq 0 ]; then
+  echo "Nenhuma alteração proposta/encontrada."
+else
+  echo "Total de arquivos com mudanças propostas: $modified"
+  if [ "$APPLY" = false ]; then
+    echo "Execute com --apply para aplicar as mudanças (backups serão criados com sufixo $BACKUP_SUFFIX)."
+  else
+    echo "Mudanças aplicadas. Revise e rode testes. Backups foram criados com sufixo $BACKUP_SUFFIX."
+  fi
+fi
+
+exit 0

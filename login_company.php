@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_result($cid, $hash);
     if ($stmt->fetch() && password_verify($senha, $hash)) {
         $_SESSION['company_id'] = $cid;
-        header('Location: /company/dashboard.php');
+        header('Location: company/dashboard.php');
         exit;
     }
     $erro = 'Credenciais inválidas.';
@@ -38,7 +38,7 @@ require __DIR__.'/includes/header.php';
       </div>
       <div class="d-flex justify-content-between">
         <button class="btn btn-primary">Entrar</button>
-        <a class="btn btn-outline-secondary" href="/register_company.php">Criar conta</a>
+        <a class="btn btn-outline-secondary" href="register_company.php">Criar conta</a>
       </div>
     </form>
   </div>
