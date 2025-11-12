@@ -4,8 +4,8 @@
     <h1 class="mb-3">Sistema de Escalação de Trabalhos Intermitentes</h1>
     <p>Encontre trabalhos intermitentes facilmente ou recrute profissionais para seus eventos.</p>
     <div class="d-flex gap-2 mt-4">
-      <a href="/register_user.php" class="btn btn-primary btn-lg">Sou Trabalhador</a>
-      <a href="/register_company.php" class="btn btn-outline-primary btn-lg">Sou Empresa</a>
+      <a href="register_user.php" class="btn btn-primary btn-lg">Sou Trabalhador</a>
+      <a href="register_company.php" class="btn btn-outline-primary btn-lg">Sou Empresa</a>
     </div>
   </div>
   <div class="col-lg-6">

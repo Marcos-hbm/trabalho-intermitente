@@ -2,26 +2,7 @@
 require __DIR__.'/../includes/db.php';
 require __DIR__.'/../includes/auth.php';
 requireUser();
-
-$busca = trim($_GET['q'] ?? '');
-$sql = "SELECT e.id, e.nome, e.descricao, e.event_date, e.image_path, c.nome AS empresa, v.nome AS local
-        FROM events e
-        JOIN companies c ON c.id = e.company_id
-        LEFT JOIN venues v ON v.id = e.venue_id
-        WHERE e.event_date >= CURDATE()";
-$params = [];
-$types = '';
-if ($busca !== '') {
-    $sql .= " AND (e.nome LIKE CONCAT('%', ?, '%') OR e.descricao LIKE CONCAT('%', ?, '%') OR c.nome LIKE CONCAT('%', ?, '%'))";
-    $types .= 'sss';
-    $params = [$busca, $busca, $busca];
-}
-$sql .= " ORDER BY e.event_date ASC, e.id DESC";
-$stmt = $mysqli->prepare($sql);
-if ($types) $stmt->bind_param($types, ...$params);
-$stmt->execute();
-$result = $stmt->get_result();
-require __DIR__.'/../includes/header.php';
+// ... consulta e renderização
 ?>
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Jobs Disponíveis</h2>
@@ -48,10 +29,10 @@ require __DIR__.'/../includes/header.php';
         </div>
       </div>
       <div class="card-footer bg-white">
-        <form method="post" action="/user/apply.php" class="d-flex justify-content-between">
+        <form method="post" action="user/apply.php" class="d-flex justify-content-between">
           <input type="hidden" name="event_id" value="<?=intval($row['id'])?>">
           <button class="btn btn-primary btn-sm">Candidatar-se</button>
-          <a class="btn btn-outline-secondary btn-sm" href="/company/view_user.php?preview=1&event_id=<?=intval($row['id'])?>">Detalhes</a>
+          <a class="btn btn-outline-secondary btn-sm" href="company/view_user.php?preview=1&event_id=<?=intval($row['id'])?>">Detalhes</a>
         </form>
       </div>
     </div>
